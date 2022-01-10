@@ -1,0 +1,79 @@
+service:
+  name: auctionService
+
+plugins:
+  - serverless-bundle
+  - serverless-pseudo-parameters
+  - serverless-offline
+  - serverless-dotenv-plugin
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 256
+  stage: ${opt:stage, 'dev'}
+  region: ap-south-1
+  # iamRoleStatements:
+  #   - Effect: "Allow"
+  #     Action:
+  #       - "dynamodb:PutItem"
+  #     Resource:
+  #       - arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/AuctionTable
+  
+functions:
+  getData:
+    handler: src/handlers/getData.handler
+    events:
+      - http:
+          method: GET
+          path: /data      
+          cors: true      
+  getOne:
+    handler: src/handlers/getOne.handler
+    events:
+      - http:
+          method: GET
+          path: /getone/{id}     
+          cors: true      
+  createData:
+    handler: src/handlers/createData.handler
+    events:
+      - http:
+          method: POST
+          path: /create
+          cors: true
+  updateData:
+    handler: src/handlers/updateData.handler
+    events:
+      - http:
+          method: PUT
+          path: /update/{id}
+          cors: true
+  deleteData:
+    handler: src/handlers/deleteData.handler
+    events:
+      - http:
+          method: DELETE
+          path: /delete/{id}
+          cors: true
+
+
+
+
+# resources:
+#   Resources:
+#     AuctionTable:
+#       Type: AWS::DynamoDB::Table
+#       Properties:
+#         TableName: AuctionTable
+#         BillingMode: PAY_PER_REQUEST
+#         AttributeDefinitions:
+#           - AttributeName: id
+#             AttributeType: S
+#         KeySchema:
+#           - AttributeName: id
+#             KeyType: HASH
+
+custom:
+  bundle:
+    linting: false
