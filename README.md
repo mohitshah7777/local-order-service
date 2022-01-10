@@ -1,5 +1,3 @@
-# Codingly.io: Base Serverless Framework Template
-
 ## Getting started
 ```
 cd YOUR_PROJECT_NAME
